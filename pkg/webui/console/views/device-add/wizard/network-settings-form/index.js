@@ -113,6 +113,12 @@ const NetworkSettingsForm = props => {
         lorawanVersion={lorawanVersion}
       />
       <Form.Field
+        title={sharedMessages.supportsClassB}
+        name="supports_class_b"
+        component={Checkbox}
+        onChange={handleDeviceClassChange}
+      />
+      <Form.Field
         title={sharedMessages.supportsClassC}
         name="supports_class_c"
         component={Checkbox}
