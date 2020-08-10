@@ -12,6 +12,8 @@ For details about compatibility between different releases, see the **Commitment
 ### Added
 
 - More password validation rules in the user management form in the Console.
+- Support for class B end devices in the Console.
+- MAC settings configuration when creating and editing end device in the Console.
 
 ### Changed
 
