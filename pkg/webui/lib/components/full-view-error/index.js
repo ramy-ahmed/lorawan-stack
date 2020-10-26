@@ -93,7 +93,7 @@ const FullViewErrorInnerWithEnv = withEnv(FullViewErrorInner)
 const FullViewError = function({ error, header: Header }) {
   return (
     <div className={style.wrapper}>
-      <Header className={style.header} anchored />
+      {Boolean(Header) && <Header className={style.header} anchored />}
       <div className={style.flexWrapper}>
         <FullViewErrorInnerWithEnv error={error} />
       </div>
@@ -109,7 +109,11 @@ FullViewErrorInner.propTypes = {
 
 FullViewError.propTypes = {
   error: PropTypes.error.isRequired,
-  header: PropTypes.node.isRequired,
+  header: PropTypes.node,
+}
+
+FullViewError.defaultProps = {
+  header: undefined,
 }
 
 FullViewErrorInner.defaultProps = {
