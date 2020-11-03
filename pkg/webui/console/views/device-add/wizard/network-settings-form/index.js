@@ -14,7 +14,6 @@
 
 import React from 'react'
 
-import Radio from '@ttn-lw/components/radio-button'
 import Input from '@ttn-lw/components/input'
 import Select from '@ttn-lw/components/select'
 import Breadcrumb from '@ttn-lw/components/breadcrumbs/breadcrumb'
@@ -35,11 +34,8 @@ import PropTypes from '@ttn-lw/lib/prop-types'
 import {
   ACTIVATION_MODES,
   LORAWAN_VERSIONS,
-  FRAME_WIDTH_COUNT,
   parseLorawanMacVersion,
   generate16BytesKey,
-  fCntWidthEncode,
-  fCntWidthDecode,
 } from '@console/lib/device-utils'
 
 import validationSchema from './validation-schema'
@@ -78,6 +74,10 @@ const NetworkSettingsForm = props => {
   const isABP = activationMode === ACTIVATION_MODES.ABP
   const isMulticast = activationMode === ACTIVATION_MODES.MULTICAST
   const lwVersion = parseLorawanMacVersion(lorawanVersion)
+  // Expand the advanced settings section:
+  // 1. For multicast end devices becaise of the required `mac_settings.ping_slot_periodicity` field.
+  // 2. For failed NS submission because of any possibly required`mac_settings` field.
+  const expandAdvancedSettings = isMulticast || Boolean(error)
 
   const validationContext = React.useMemo(
     () => ({
@@ -118,16 +118,6 @@ const NetworkSettingsForm = props => {
         component={PhyVersionInput}
         lorawanVersion={lorawanVersion}
       />
-      <Form.Field
-        title={sharedMessages.frameCounterWidth}
-        name="mac_settings.supports_32_bit_f_cnt"
-        component={Radio.Group}
-        encode={fCntWidthEncode}
-        decode={fCntWidthDecode}
-      >
-        <Radio label={sharedMessages['16Bit']} value={FRAME_WIDTH_COUNT.SUPPORTS_16_BIT} />
-        <Radio label={sharedMessages['32Bit']} value={FRAME_WIDTH_COUNT.SUPPORTS_32_BIT} />
-      </Form.Field>
       <Form.Field
         title={sharedMessages.deviceClass}
         name="_device_classes"
