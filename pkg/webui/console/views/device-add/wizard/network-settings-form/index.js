@@ -18,7 +18,7 @@ import Input from '@ttn-lw/components/input'
 import Select from '@ttn-lw/components/select'
 import Breadcrumb from '@ttn-lw/components/breadcrumbs/breadcrumb'
 import { withBreadcrumb } from '@ttn-lw/components/breadcrumbs/context'
-import Wizard from '@ttn-lw/components/wizard'
+import Wizard, { useWizardContext } from '@ttn-lw/components/wizard'
 import Form from '@ttn-lw/components/form'
 import Checkbox from '@ttn-lw/components/checkbox'
 
@@ -62,7 +62,8 @@ const defaultFormValues = {
 }
 
 const NetworkSettingsForm = props => {
-  const { activationMode, lorawanVersion, error } = props
+  const { activationMode, lorawanVersion } = props
+  const { error } = useWizardContext()
 
   const [isClassB, setClassB] = React.useState(activationMode === ACTIVATION_MODES.MULTICAST)
   const handleClassBChange = React.useCallback(evt => {
@@ -97,7 +98,6 @@ const NetworkSettingsForm = props => {
       initialValues={initialFormValues}
       validationSchema={validationSchema}
       validationContext={validationContext}
-      error={error}
       excludePaths={excludePaths}
     >
       <NsFrequencyPlansSelect required autoFocus name="frequency_plan_id" />
@@ -119,7 +119,7 @@ const NetworkSettingsForm = props => {
         lorawanVersion={lorawanVersion}
       />
       <Form.Field
-        title={sharedMessages.deviceClass}
+        title={sharedMessages.lorawanClassCapabilities}
         name="_device_classes"
         component={Checkbox.Group}
         required={isMulticast}
@@ -188,7 +188,7 @@ const NetworkSettingsForm = props => {
       <MacSettingsSection
         activationMode={activationMode}
         isClassB={isClassB}
-        initiallyCollapsed={!isMulticast}
+        initiallyCollapsed={!expandAdvancedSettings}
       />
     </Wizard.Form>
   )
@@ -196,12 +196,7 @@ const NetworkSettingsForm = props => {
 
 NetworkSettingsForm.propTypes = {
   activationMode: PropTypes.string.isRequired,
-  error: PropTypes.error,
   lorawanVersion: PropTypes.string.isRequired,
-}
-
-NetworkSettingsForm.defaultProps = {
-  error: undefined,
 }
 
 const WrappedNetworkSettingsForm = withBreadcrumb('device.add.steps.network', props => (

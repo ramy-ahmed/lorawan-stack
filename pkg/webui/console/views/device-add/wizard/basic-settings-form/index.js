@@ -40,7 +40,7 @@ const defaultInitialValues = {
 }
 
 const BasicSettingsForm = props => {
-  const { lorawanVersion, activationMode, error, prefixes } = props
+  const { lorawanVersion, activationMode, prefixes } = props
 
   const validationContext = React.useMemo(
     () => ({
@@ -59,7 +59,6 @@ const BasicSettingsForm = props => {
       validationSchema={validationSchema}
       validationContext={validationContext}
       initialValues={defaultInitialValues}
-      error={error}
     >
       <Form.Field
         required
@@ -119,13 +118,8 @@ const BasicSettingsForm = props => {
 
 BasicSettingsForm.propTypes = {
   activationMode: PropTypes.oneOf(Object.values(ACTIVATION_MODES)).isRequired,
-  error: PropTypes.error,
   lorawanVersion: PropTypes.string.isRequired,
   prefixes: PropTypes.euiPrefixes.isRequired,
-}
-
-BasicSettingsForm.defaultProps = {
-  error: undefined,
 }
 
 const WrappedBasicSettingsForm = withBreadcrumb('device.add.steps.basic', props => (

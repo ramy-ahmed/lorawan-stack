@@ -42,7 +42,7 @@ const defaultInitialValues = {
 const netIdDecoder = value => (value === null ? '' : value)
 
 const JoinSettingsForm = React.memo(props => {
-  const { lorawanVersion, mayEditKeys, error } = props
+  const { lorawanVersion, mayEditKeys } = props
 
   const validationContext = React.useMemo(
     () => ({
@@ -64,7 +64,6 @@ const JoinSettingsForm = React.memo(props => {
 
   return (
     <Wizard.Form
-      error={error}
       initialValues={defaultInitialValues}
       validationContext={validationContext}
       validationSchema={validationSchema}
@@ -156,13 +155,8 @@ const JoinSettingsForm = React.memo(props => {
 })
 
 JoinSettingsForm.propTypes = {
-  error: PropTypes.error,
   lorawanVersion: PropTypes.string.isRequired,
   mayEditKeys: PropTypes.bool.isRequired,
-}
-
-JoinSettingsForm.defaultProps = {
-  error: undefined,
 }
 
 const WrappedJoinSettingsForm = withBreadcrumb('device.add.steps.join', props => (
