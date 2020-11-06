@@ -301,6 +301,7 @@ func (as *ApplicationServer) processUp(ctx context.Context, up *ttnpb.Applicatio
 }
 
 func (as *ApplicationServer) publishUp(ctx context.Context, up *ttnpb.ApplicationUp) error {
+	ctx = as.FromRequestContext(ctx)
 	if err := as.localDistributor.Publish(ctx, up); err != nil {
 		return err
 	}
@@ -417,7 +418,7 @@ func (as *ApplicationServer) downlinkQueueOp(ctx context.Context, ids ttnpb.EndD
 			errorDetails = *ttnpb.ErrorDetailsToProto(ttnErr)
 		}
 		for _, item := range items {
-			if err := as.publishUp(as.FromRequestContext(ctx), &ttnpb.ApplicationUp{
+			if err := as.publishUp(ctx, &ttnpb.ApplicationUp{
 				EndDeviceIdentifiers: ids,
 				CorrelationIDs:       item.CorrelationIDs,
 				Up: &ttnpb.ApplicationUp_DownlinkFailed{
@@ -434,7 +435,7 @@ func (as *ApplicationServer) downlinkQueueOp(ctx context.Context, ids ttnpb.EndD
 		return err
 	}
 	for _, item := range items {
-		if err := as.publishUp(as.FromRequestContext(ctx), &ttnpb.ApplicationUp{
+		if err := as.publishUp(ctx, &ttnpb.ApplicationUp{
 			EndDeviceIdentifiers: ids,
 			CorrelationIDs:       item.CorrelationIDs,
 			Up: &ttnpb.ApplicationUp_DownlinkQueued{
